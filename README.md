@@ -1,5 +1,6 @@
 # cs354r-project1
 ### Instructions
+Note: I'm not sure why ogre asks about the renderer, but OpenGL with all defaults works fine.
 To run from executable:  ./Prebuilt
 To run from source code: ./buildit && ./Project1
 
@@ -8,7 +9,7 @@ For this project I started with the buildit/makeit setup linked to in the projec
 
 ## Extra Credit
 ### Pysics
-The movement of the balls is done with some hand written pseudo-physics of mine, where there is collision with walls and other balls, gravity, loss of energy on surface collision, and some friction when rolling on the ground. They eventually come to rest. Very occasionally two balls will stick to each other, but easily become unstuck when a third ball intervenes.
+The movement of the balls is done with some hand written pseudo-physics of mine, where there are collisions with walls and other balls, gravity, loss of energy on surface collision, and some friction when rolling on the ground. They eventually come to stop. Very occasionally two balls will stick to each other, but easily become unstuck when a third ball intervenes.
 
 ### Graphics
 I enabled shadows, have ambient lighting, and two diffuse lights.
