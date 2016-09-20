@@ -188,9 +188,9 @@ class Sphere {
                 _sn->translate(0, (_ymin-ypos)*.0001, 0);
 
             if(abs(ypos-_ymin) < 1.0 and abs(_vy) < .1) {
-                _vx = _vx*.9995;
+                _vx = _vx*.9999;
                 _vy = 0;
-                _vz = _vz*.9995;
+                _vz = _vz*.9999;
             }
         }
 
