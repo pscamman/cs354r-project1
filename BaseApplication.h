@@ -30,6 +30,7 @@ http://www.ogre3d.org/wiki/
 //my includes
 #include <OgrePlane.h>
 #include <OgreVector3.h>
+#include <cmath>         /* abs, pow    */
 #include <string>        /* to_string   */
 #include <stdlib.h>      /* srand, rand */
 #include <time.h>        /* time        */
@@ -147,23 +148,25 @@ class Sphere {
     typedef Ogre::SceneNode SceneNode;
 
     private:
-        SceneNode* _sn;
+        SceneNode*  _sn;
 
-        Real       _vx;
-        Real       _vy;
-        Real       _vz;
+        Real        _vx;
+        Real        _vy;
+        Real        _vz;
 
-        Real       _xmin;
-        Real       _xmax;
-        Real       _ymin;
-        Real       _ymax;
-        Real       _zmin;
-        Real       _zmax;
+        Real        _xmin;
+        Real        _xmax;
+        Real        _ymin;
+        Real        _ymax;
+        Real        _zmin;
+        Real        _zmax;
+
+        Real        _t;
 
         void bounce(const Real& min, const Real& max, Real& vel, const Real& pos) {
             if(pos < min and vel < 0 or
                pos > max and vel > 0)
-            vel *= -.95;
+                vel *= -.95;
         }
 
         void xbounce() {
@@ -178,12 +181,17 @@ class Sphere {
             bounce(_zmin, _zmax, _vz, _sn->_getDerivedPosition().z);
         }
 
-        void move(const Real& dt) {
-            _sn->translate(_vx*dt, _vy*dt, _vz*dt);
+        void move() {
+            _sn->translate(_vx*.0001, _vy*.0001, _vz*.0001);
             Real ypos = _sn->_getDerivedPosition().y;
             if(ypos < _ymin)
-                _sn->translate(0, (_ymin-ypos)*dt, 0);
+                _sn->translate(0, (_ymin-ypos)*.0001, 0);
 
+            if(abs(ypos-_ymin) < 1.0 and abs(_vy) < .1) {
+                _vx = _vx*.9995;
+                _vy = 0;
+                _vz = _vz*.9995;
+            }
         }
 
     public:
@@ -196,18 +204,24 @@ class Sphere {
               _zmax(zmax),
               _zmin(zmin) {
             _vx = (rand()%2*2-1)*rand()%160 + 40;
-            _vy = (rand()%2*2-1)*rand()% 40 + 10;
+            _vy = (rand()%2*2-1)*rand()%160 + 40;
             _vz = (rand()%2*2-1)*rand()%160 + 40;
+            _t  = 0;
         }
 
         void update(const Real& dt) {
-            xbounce();
-            ybounce();
-            zbounce();
+            _t += dt;
+            while(_t > .0001) {
+                xbounce();
+                ybounce();
+                zbounce();
 
-            _vy -= 1000*dt;
+                _vy -= .1;
 
-            move(dt);
+                move();
+
+                _t -= .0001;
+            }
         }
 
     void collision(Sphere& s2) {
